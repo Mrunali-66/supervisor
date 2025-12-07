@@ -1,129 +1,197 @@
 import React, { useState } from 'react';
-import { Menu, X, Bell, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import { User, LogOut, Settings, LayoutDashboard, Users, CheckSquare, Bell, Sliders } from 'lucide-react';
 
-const MainLayout = ({ children, currentPage, setCurrentPage }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const MainLayout = ({ 
+  currentPage, 
+  setCurrentPage,
+  lang,
+  userName,
+  userPhoto,
+  setUserPhoto,
+  setUserName,
+  onProfileClick,
+  onLogout,
+  children 
+}) => {
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-    { id: 'workers', label: 'Workers', icon: '👥' },
-    { id: 'tasks', label: 'Tasks', icon: '✅' },
-    { id: 'alerts', label: 'Alerts', icon: '🔔' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' },
-  ];
-
-  const handleNavigation = (pageId) => {
-    setCurrentPage(pageId);
-    setSidebarOpen(false);
+  const translations = {
+    en: {
+      dashboard: 'Dashboard',
+      workers: 'Workers',
+      tasks: 'Tasks',
+      alerts: 'Alerts',
+      settings: 'Settings',
+      menu: 'Menu',
+      logout: 'Logout',
+      asha: 'ASHA Supervisor',
+      ministry: 'Ministry of Health and Family Welfare',
+      govt: 'Government of India'
+    },
+    mr: {
+      dashboard: 'डॅशबोर्ड',
+      workers: 'कार्यकर्ते',
+      tasks: 'कार्ये',
+      alerts: 'सूचना',
+      settings: 'सेटिंग्ज',
+      menu: 'मेनू',
+      logout: 'लॉग आउट',
+      asha: 'आशा पर्यवेक्षक',
+      ministry: 'आरोग्य आणि कुटुंब कल्याण मंत्रालय',
+      govt: 'भारत सरकार'
+    }
   };
 
+  const t = (key) => translations[lang][key] || key;
+
+  const navItems = [
+    { id: 'dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    { id: 'workers', label: t('workers'), icon: Users },
+    { id: 'tasks', label: t('tasks'), icon: CheckSquare },
+    { id: 'alerts', label: t('alerts'), icon: Bell },
+    { id: 'settings', label: t('settings'), icon: Sliders }
+  ];
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 w-72 bg-gradient-to-b from-blue-900 to-blue-800 border-r-4 border-orange-400 transform transition-transform duration-300 z-40 lg:relative lg:translate-x-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        {/* Sidebar Header */}
-        <div className="border-b-4 border-orange-400 p-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-400 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">🔍</span>
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-lg">ASHA Supervisor</h1>
-              <p className="text-blue-200 text-xs">v2.1.0</p>
-            </div>
-          </div>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-white hover:text-orange-300"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
-        {/* Navigation Menu */}
-        <nav className="mt-6 px-4 space-y-2">
-          {navigationItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => handleNavigation(item.id)}
-              className={`w-full text-left px-6 py-4 rounded-none border-l-4 transition-all font-semibold flex items-center gap-3 ${
-                currentPage === item.id
-                  ? 'bg-orange-400 border-l-4 border-white text-white'
-                  : 'bg-blue-700 border-l-4 border-transparent text-blue-100 hover:bg-blue-600'
-              }`}
-            >
-              <span className="text-xl">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        {/* Sidebar Footer */}
-        <div className="absolute bottom-0 left-0 right-0 border-t-4 border-orange-400 p-4 space-y-2">
-          <button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-none flex items-center justify-center gap-2 transition-colors">
-            <LogOut size={20} /> Logout
-          </button>
-          <p className="text-blue-200 text-xs text-center mt-3">
-            © 2024 Ministry of Health<br />Government of India
-          </p>
+    <div className="flex flex-col min-h-screen bg-white">
+      {/* Government Header - Top Blue Bar */}
+      <div className="bg-blue-900 text-white py-2 px-8 text-xs font-semibold">
+        <div className="flex justify-between items-center">
+          <span>{t('ministry')}</span>
+          <span>{t('govt')}</span>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Navigation Bar */}
-        <div className="bg-white border-b-4 border-orange-400 shadow-md">
-          <div className="flex items-center justify-between px-6 py-4">
-            {/* Left Section */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden text-blue-900 hover:text-orange-500"
-              >
-                <Menu size={24} />
-              </button>
-              <div>
-                <p className="text-sm text-gray-600">Ministry of Health and Family Welfare</p>
-                <h2 className="text-xl font-bold text-blue-900">ASHA Worker Supervision System</h2>
-              </div>
+      {/* Main Header */}
+      <div className="bg-gradient-to-r from-blue-800 to-blue-700 px-8 py-5 shadow-md border-b-4 border-orange-400">
+        <div className="flex items-center justify-between">
+          {/* Logo and Title */}
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center shadow-md border-2 border-orange-400">
+              <span className="text-blue-900 font-bold text-2xl">🇮🇳</span>
             </div>
+            <div className="border-l-2 border-blue-500 pl-5">
+              <p className="text-blue-100 text-sm font-semibold uppercase tracking-wider">ASHA Workers Management</p>
+              <h1 className="text-white text-2xl font-bold mt-1">आशा कार्यकर्ता व्यवस्थापन</h1>
+              <p className="text-blue-200 text-xs mt-1">Ministry of Health and Family Welfare</p>
+            </div>
+          </div>
 
-            {/* Right Section */}
-            <div className="flex items-center gap-6">
-              <div className="hidden md:flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-gray-800">Ram Kumar</p>
-                  <p className="text-xs text-gray-600">Senior ASHA Supervisor</p>
+          {/* Admin Profile on Right */}
+          <div className="flex items-center gap-6 border-l-2 border-blue-500 pl-6">
+            <div className="text-right">
+              <p className="text-white font-bold text-sm">{userName}</p>
+              <p className="text-blue-200 text-xs font-medium mt-1">Senior ASHA Supervisor</p>
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="w-14 h-14 rounded-lg border-3 border-white overflow-hidden flex items-center justify-center bg-white hover:shadow-lg transition-shadow flex-shrink-0"
+              >
+                {userPhoto ? (
+                  <img src={userPhoto} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <User size={28} className="text-blue-900" />
+                )}
+              </button>
+
+              {/* Profile Dropdown Menu */}
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-300 shadow-xl z-50 rounded-sm">
+                  <div className="px-4 py-4 border-b border-gray-200 bg-gray-50">
+                    <p className="text-sm font-bold text-blue-900">{userName}</p>
+                    <p className="text-xs text-blue-700 mt-1">Senior ASHA Supervisor</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      onProfileClick();
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-blue-50 flex items-center gap-3 text-gray-700 font-semibold text-sm border-b border-gray-200 transition-colors"
+                  >
+                    <Settings size={18} className="text-blue-900" />
+                    {t('settings')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      onLogout();
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-red-50 flex items-center gap-3 text-red-700 font-semibold text-sm transition-colors"
+                  >
+                    <LogOut size={18} />
+                    {t('logout')}
+                  </button>
                 </div>
-              </div>
-              <button className="relative text-gray-700 hover:text-blue-900 transition-colors">
-                <Bell size={24} />
-                <span className="absolute top-0 right-0 w-3 h-3 bg-red-600 rounded-full"></span>
-              </button>
-              <button className="text-gray-700 hover:text-blue-900 transition-colors">
-                <SettingsIcon size={24} />
-              </button>
+              )}
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Page Content */}
-        <div className="flex-1 overflow-y-auto">
+      {/* Main Content Area */}
+      <div className="flex flex-1">
+        {/* Sidebar Navigation */}
+        <div className="w-64 bg-blue-800 shadow-lg flex flex-col border-r border-blue-900">
+          {/* Menu Header */}
+          <div className="px-6 py-4 border-b border-blue-700 bg-blue-900">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wide">Main Menu</h3>
+          </div>
+
+          {/* Menu Items */}
+          <div className="p-0 flex-1 overflow-y-auto">
+            <nav className="space-y-1">
+              {navItems.map((item) => {
+                const IconComponent = item.icon;
+                const isActive = currentPage === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setCurrentPage(item.id)}
+                    className={`w-full flex items-center gap-4 px-6 py-4 font-semibold text-sm transition-colors duration-200 border-l-4 ${
+                      isActive
+                        ? 'bg-orange-500 text-white border-l-orange-600'
+                        : 'text-blue-100 hover:bg-blue-700 hover:text-white border-l-blue-800'
+                    }`}
+                  >
+                    <IconComponent size={20} className="flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Logout Button at Bottom */}
+          <div className="p-4 border-t border-blue-700 bg-blue-900">
+            <button
+              onClick={() => {
+                onLogout();
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-sm transition-colors rounded-sm shadow-md"
+            >
+              <LogOut size={18} />
+              {t('logout')}
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="px-4 py-3 text-center border-t border-blue-700 bg-blue-950">
+            <p className="text-blue-300 text-xs leading-relaxed">© 2025 Ministry of Health &</p>
+            <p className="text-blue-300 text-xs">Family Welfare, Govt. of India</p>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-auto bg-gray-50">
           {children}
         </div>
       </div>
 
-      {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 lg:hidden z-30"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
+      {/* Bottom Footer */}
+      <div className="bg-blue-900 text-blue-200 text-xs py-3 px-8 border-t border-blue-800 text-center">
+        <p>© 2025 All Rights Reserved. Ministry of Health and Family Welfare, Government of India</p>
+      </div>
     </div>
   );
 };
