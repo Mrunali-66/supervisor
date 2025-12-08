@@ -69,25 +69,25 @@ const MainLayout = ({
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden p-2 text-white hover:bg-blue-600 rounded-lg transition-colors"
+            className="md:hidden p-2 text-white hover:bg-blue-600 rounded-lg transition-colors flex-shrink-0"
           >
             {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           {/* Logo and Title */}
-          <div className="flex items-center gap-3 md:gap-5 flex-1 md:flex-initial">
+          <div className="flex items-center gap-3 md:gap-5 flex-1 md:flex-initial min-w-0">
             <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-lg flex items-center justify-center shadow-md border-2 border-orange-400 flex-shrink-0">
               <span className="text-blue-900 font-bold text-xl md:text-2xl">🇮🇳</span>
             </div>
-            <div className="border-l-2 border-blue-500 pl-3 md:pl-5">
+            <div className="border-l-2 border-blue-500 pl-3 md:pl-5 min-w-0">
               <p className="text-blue-100 text-xs md:text-sm font-semibold uppercase tracking-wider hidden sm:block">ASHA Workers Management</p>
-              <h1 className="text-white text-lg md:text-2xl font-bold mt-0 md:mt-1">आशा कार्यकर्ता व्यवस्थापन</h1>
+              <h1 className="text-white text-base md:text-2xl font-bold mt-0 md:mt-1 truncate">आशा कार्यकर्ता व्यवस्थापन</h1>
               <p className="text-blue-200 text-xs mt-1 hidden lg:block">Ministry of Health and Family Welfare</p>
             </div>
           </div>
 
           {/* Admin Profile on Right */}
-          <div className="flex items-center gap-3 md:gap-6 md:border-l-2 md:border-blue-500 md:pl-6">
+          <div className="flex items-center gap-3 md:gap-6 md:border-l-2 md:border-blue-500 md:pl-6 flex-shrink-0">
             <div className="text-right hidden lg:block">
               <p className="text-white font-bold text-sm">{userName}</p>
               <p className="text-blue-200 text-xs font-medium mt-1">Senior ASHA Supervisor</p>
