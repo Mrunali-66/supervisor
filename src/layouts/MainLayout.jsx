@@ -54,18 +54,18 @@ const MainLayout = ({
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white overflow-x-hidden">
       {/* Government Header - Top Blue Bar */}
-      <div className="bg-blue-900 text-white py-2 px-4 md:px-8 text-xs font-semibold">
-        <div className="flex justify-between items-center">
-          <span className="truncate">{t('ministry')}</span>
-          <span className="hidden sm:block">{t('govt')}</span>
+      <div className="bg-blue-900 text-white py-2 px-4 md:px-8 text-xs font-semibold w-full">
+        <div className="flex justify-between items-center max-w-full">
+          <span className="truncate flex-1">{t('ministry')}</span>
+          <span className="hidden sm:block ml-2">{t('govt')}</span>
         </div>
       </div>
 
       {/* Main Header */}
-      <div className="bg-gradient-to-r from-blue-800 to-blue-700 px-4 md:px-8 py-4 md:py-5 shadow-md border-b-4 border-orange-400">
-        <div className="flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-700 px-4 md:px-8 py-4 md:py-5 shadow-md border-b-4 border-orange-400 w-full">
+        <div className="flex items-center justify-between max-w-full gap-2">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -139,7 +139,7 @@ const MainLayout = ({
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1 relative overflow-hidden w-full">
         {/* Mobile Menu Overlay */}
         {showMobileMenu && (
           <div
@@ -215,8 +215,10 @@ const MainLayout = ({
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 overflow-auto bg-gray-50 w-full">
-          {children}
+        <div className="flex-1 overflow-auto bg-gray-50 w-full min-w-0">
+          <div className="w-full max-w-full">
+            {children}
+          </div>
         </div>
       </div>
 
