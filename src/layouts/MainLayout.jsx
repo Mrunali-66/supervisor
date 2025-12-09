@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { User, LogOut, Settings, LayoutDashboard, Users, CheckSquare, Bell, Sliders, Menu, X } from 'lucide-react';
 
 const MainLayout = ({ 
-  currentPage, 
-  setCurrentPage,
-  lang,
-  userName,
-  userPhoto,
-  setUserPhoto,
-  setUserName,
-  onProfileClick,
-  onLogout,
+  currentPage = 'dashboard', 
+  setCurrentPage = () => {},
+  lang = 'en',
+  userName = 'Admin User',
+  userPhoto = null,
+  setUserPhoto = () => {},
+  setUserName = () => {},
+  onProfileClick = () => {},
+  onLogout = () => {},
   children 
 }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -43,7 +43,7 @@ const MainLayout = ({
     }
   };
 
-  const t = (key) => translations[lang][key] || key;
+  const t = (key) => translations[lang]?.[key] || key;
 
   const navItems = [
     { id: 'dashboard', label: t('dashboard'), icon: LayoutDashboard },
@@ -80,7 +80,7 @@ const MainLayout = ({
               <span className="text-blue-900 font-bold text-xl md:text-2xl">🇮🇳</span>
             </div>
             <div className="border-l-2 border-blue-500 pl-3 md:pl-5 min-w-0">
-              <p className="text-blue-100 text-xs md:text-sm font-semibold uppercase tracking-wider hidden sm:block">ASHA Workers Management</p>
+              <p className="text-blue-100 text-xs md:text-sm font-semibold uppercase tracking-wider">ASHA Workers Management</p>
               <h1 className="text-white text-base md:text-2xl font-bold mt-0 md:mt-1 truncate">आशा कार्यकर्ता व्यवस्थापन</h1>
               <p className="text-blue-200 text-xs mt-1 hidden lg:block">Ministry of Health and Family Welfare</p>
             </div>

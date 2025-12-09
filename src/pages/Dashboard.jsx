@@ -12,7 +12,7 @@ const Dashboard = ({ selectedWorker, lang, setLang }) => {
 
   const translations = {
     en: {
-      appTitle: 'AASHA Worker Supervision System',
+      appTitle: 'ASHA Worker Supervision System',
       appSubtitle: 'Ministry of Health and Family Welfare, Government of India',
       dashboard: 'Dashboard',
       dashboardOverview: 'Dashboard Overview',
