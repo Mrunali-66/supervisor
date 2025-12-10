@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AlertTriangle, AlertCircle, Info, CheckCircle, Bell, X, Clock, Globe } from 'lucide-react';
+import { AlertTriangle, AlertCircle, Info, CheckCircle, Bell, X, Clock } from 'lucide-react';
+import { useAppContext } from '../App';
 
 const mockAlerts = [
   { id: 1, type: 'critical', title: 'Task Overdue', titleMr: 'कार्य मुदत संपली', message: 'Priya Sharma has not completed task "Vaccination Drive" due since 2024-01-15', messageMr: 'प्रिया शर्मा यांनी 2024-01-15 पासून "लसीकरण अभियान" कार्य पूर्ण केलेले नाही', worker: 'प्रिया शर्मा', timestamp: '2 hours ago', timestampMr: '2 तास पूर्वी', read: false },
@@ -11,18 +12,16 @@ const mockAlerts = [
 ];
 
 const Alerts = () => {
-  const [lang, setLang] = useState('en');
+  const { lang, isDark } = useAppContext();
   const [alerts, setAlerts] = useState(mockAlerts);
   const [filterType, setFilterType] = useState('all');
   const [filterRead, setFilterRead] = useState('unread');
 
   const translations = {
     en: {
-      pageTitle: 'Alerts & Notifications',
-      pageSubtitle: 'Ministry of Health and Family Welfare, Government of India',
-      unreadAlerts: 'Unread Alerts',
       systemAlerts: 'System Alerts & Notifications',
       monitorAlerts: 'Monitor critical alerts, warnings, and notifications from the system',
+      unreadAlerts: 'Unread Alerts',
       alertStatistics: 'Alert Statistics',
       criticalAlerts: 'Critical Alerts',
       requiresImmediate: 'Requires immediate action',
@@ -48,14 +47,11 @@ const Alerts = () => {
       dismiss: 'Dismiss',
       new: 'NEW',
       worker: 'Worker:',
-      copyright: '© 2025 Ministry of Health and Family Welfare, Government of India | Auto-refresh enabled: Every 5 minutes',
     },
     mr: {
-      pageTitle: 'सूचना आणि अधिसूचना',
-      pageSubtitle: 'आरोग्य आणि कुटुंब कल्याण मंत्रालय, भारत सरकार',
-      unreadAlerts: 'अपठित सूचना',
       systemAlerts: 'प्रणाली सूचना आणि अधिसूचना',
       monitorAlerts: 'प्रणालीतून गंभीर सूचना, चेतावणी आणि अधिसूचना निरीक्षण करा',
+      unreadAlerts: 'अपठित सूचना',
       alertStatistics: 'सूचना सांख्यिकी',
       criticalAlerts: 'गंभीर सूचना',
       requiresImmediate: 'तातकाल कारवाई आवश्यक',
@@ -81,11 +77,10 @@ const Alerts = () => {
       dismiss: 'रद्द करा',
       new: 'नवीन',
       worker: 'कार्यकर्ता:',
-      copyright: '© 2025 आरोग्य आणि कुटुंब कल्याण मंत्रालय, भारत सरकार | स्वयंचलित-रीफ्रेश सक्षम: प्रति 5 मिनिटे',
     }
   };
 
-  const t = (key) => translations[lang][key] || key;
+  const t = (key) => translations[lang]?.[key] || key;
 
   const filteredAlerts = alerts.filter(alert => {
     const matchesType = filterType === 'all' || alert.type === filterType;
@@ -104,11 +99,31 @@ const Alerts = () => {
   };
 
   const getAlertColor = (type) => {
+    const colors = {
+      critical: {
+        light: { bg: 'bg-red-50', border: 'border-red-600', icon: 'text-red-600', badge: 'bg-red-100 border-red-600 text-red-800' },
+        dark: { bg: 'bg-red-900 bg-opacity-20', border: 'border-red-500', icon: 'text-red-400', badge: 'bg-red-900 border-red-500 text-red-100' }
+      },
+      warning: {
+        light: { bg: 'bg-yellow-50', border: 'border-yellow-600', icon: 'text-yellow-600', badge: 'bg-yellow-100 border-yellow-600 text-yellow-800' },
+        dark: { bg: 'bg-yellow-900 bg-opacity-20', border: 'border-yellow-500', icon: 'text-yellow-400', badge: 'bg-yellow-900 border-yellow-500 text-yellow-100' }
+      },
+      info: {
+        light: { bg: 'bg-blue-50', border: 'border-blue-600', icon: 'text-blue-600', badge: 'bg-blue-100 border-blue-600 text-blue-800' },
+        dark: { bg: 'bg-blue-900 bg-opacity-20', border: 'border-blue-500', icon: 'text-blue-400', badge: 'bg-blue-900 border-blue-500 text-blue-100' }
+      }
+    };
+    return colors[type] ? (isDark ? colors[type].dark : colors[type].light) : (isDark ? colors.info.dark : colors.info.light);
+  };
+
+  const getAlertIcon = (type) => {
+    const iconColor = isDark ? 'text-gray-400' : 'text-gray-600';
+    const colors = getAlertColor(type);
     switch(type) {
-      case 'critical': return { bg: 'bg-red-50', border: 'border-red-600', icon: <AlertTriangle size={24} className="text-red-600" />, badge: 'bg-red-100 border-red-600 text-red-800' };
-      case 'warning': return { bg: 'bg-yellow-50', border: 'border-yellow-600', icon: <AlertCircle size={24} className="text-yellow-600" />, badge: 'bg-yellow-100 border-yellow-600 text-yellow-800' };
-      case 'info': return { bg: 'bg-blue-50', border: 'border-blue-600', icon: <Info size={24} className="text-blue-600" />, badge: 'bg-blue-100 border-blue-600 text-blue-800' };
-      default: return { bg: 'bg-gray-50', border: 'border-gray-600', icon: <Bell size={24} className="text-gray-600" />, badge: 'bg-gray-100 border-gray-600 text-gray-800' };
+      case 'critical': return <AlertTriangle size={24} className={colors.icon} />;
+      case 'warning': return <AlertCircle size={24} className={colors.icon} />;
+      case 'info': return <Info size={24} className={colors.icon} />;
+      default: return <Bell size={24} className={iconColor} />;
     }
   };
 
@@ -117,85 +132,52 @@ const Alerts = () => {
   const infoCount = alerts.filter(a => a.type === 'info' && !a.read).length;
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="border-b-4 border-orange-400 bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-orange-400 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🔔</span>
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white">{t('pageTitle')}</h1>
-                <p className="text-blue-100 text-sm mt-1">{t('pageSubtitle')}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <p className="text-white text-sm">{t('unreadAlerts')}</p>
-                <p className="text-4xl font-bold text-orange-300">{alerts.filter(a => !a.read).length}</p>
-              </div>
-              <div className="flex gap-2 items-center bg-blue-800 rounded-lg p-2">
-                <Globe size={20} className="text-white" />
-                <button onClick={() => setLang('en')} className={`px-3 py-1 rounded font-bold transition-all ${lang === 'en' ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-700'}`}>
-                  English
-                </button>
-                <button onClick={() => setLang('mr')} className={`px-3 py-1 rounded font-bold transition-all ${lang === 'mr' ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-700'}`}>
-                  मराठी
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <div className="p-8">
         {/* Page Title */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-blue-900 mb-2">{t('systemAlerts')}</h2>
-          <p className="text-gray-700 mb-4">{t('monitorAlerts')}</p>
-          <div className="h-1 w-24 bg-orange-400"></div>
+          <h2 className={`text-3xl font-bold mb-2 ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>{t('systemAlerts')}</h2>
+          <p className={`${isDark ? 'text-gray-300' : 'text-gray-700'} mb-4`}>{t('monitorAlerts')}</p>
+          <div className="h-1 w-32 bg-orange-400"></div>
         </div>
 
         {/* Alert Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="border-2 border-gray-300 bg-white">
-            <div className="border-b-4 border-red-600 p-6">
-              <p className="text-gray-600 font-semibold text-sm mb-3">{t('criticalAlerts')}</p>
-              <p className="text-5xl font-bold text-red-700">{criticalCount}</p>
-              <p className="text-gray-600 text-xs mt-3">{t('requiresImmediate')}</p>
+          <div className={`border-2 ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'} shadow-md hover:shadow-lg transition-shadow`}>
+            <div className={`border-b-4 ${isDark ? 'border-red-500 bg-gray-700' : 'border-red-600 bg-red-50'} p-6`}>
+              <p className={`font-semibold text-sm mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('criticalAlerts')}</p>
+              <p className={`text-5xl font-bold ${isDark ? 'text-red-400' : 'text-red-700'}`}>{criticalCount}</p>
+              <p className={`text-xs mt-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{t('requiresImmediate')}</p>
             </div>
           </div>
 
-          <div className="border-2 border-gray-300 bg-white">
-            <div className="border-b-4 border-yellow-600 p-6">
-              <p className="text-gray-600 font-semibold text-sm mb-3">{t('warnings')}</p>
-              <p className="text-5xl font-bold text-yellow-700">{warningCount}</p>
-              <p className="text-gray-600 text-xs mt-3">{t('needsAttention')}</p>
+          <div className={`border-2 ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'} shadow-md hover:shadow-lg transition-shadow`}>
+            <div className={`border-b-4 ${isDark ? 'border-yellow-500 bg-gray-700' : 'border-yellow-600 bg-yellow-50'} p-6`}>
+              <p className={`font-semibold text-sm mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('warnings')}</p>
+              <p className={`text-5xl font-bold ${isDark ? 'text-yellow-400' : 'text-yellow-700'}`}>{warningCount}</p>
+              <p className={`text-xs mt-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{t('needsAttention')}</p>
             </div>
           </div>
 
-          <div className="border-2 border-gray-300 bg-white">
-            <div className="border-b-4 border-blue-600 p-6">
-              <p className="text-gray-600 font-semibold text-sm mb-3">{t('information')}</p>
-              <p className="text-5xl font-bold text-blue-700">{infoCount}</p>
-              <p className="text-gray-600 text-xs mt-3">{t('systemNotifications')}</p>
+          <div className={`border-2 ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'} shadow-md hover:shadow-lg transition-shadow`}>
+            <div className={`border-b-4 ${isDark ? 'border-blue-500 bg-gray-700' : 'border-blue-600 bg-blue-50'} p-6`}>
+              <p className={`font-semibold text-sm mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('information')}</p>
+              <p className={`text-5xl font-bold ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>{infoCount}</p>
+              <p className={`text-xs mt-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{t('systemNotifications')}</p>
             </div>
           </div>
         </div>
 
         {/* Filter Section */}
-        <div className="border-2 border-gray-300 bg-white mb-8 p-6">
-          <h3 className="text-lg font-bold text-blue-900 mb-4">{t('filterAlerts')}</h3>
+        <div className={`border-2 ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'} mb-8 p-6 shadow-md`}>
+          <h3 className={`text-lg font-bold mb-4 ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>{t('filterAlerts')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">{t('alertType')}</label>
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('alertType')}</label>
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 focus:border-blue-900 focus:outline-none text-gray-700 bg-white"
+                className={`w-full px-4 py-3 border-2 focus:outline-none ${isDark ? 'bg-gray-700 border-gray-600 focus:border-orange-500 text-white' : 'bg-white border-gray-300 focus:border-blue-900'}`}
               >
                 <option value="all">{t('allAlertTypes')}</option>
                 <option value="critical">{t('critical')}</option>
@@ -204,11 +186,11 @@ const Alerts = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">{t('status')}</label>
+              <label className={`block text-sm font-semibold mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('status')}</label>
               <select
                 value={filterRead}
                 onChange={(e) => setFilterRead(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 focus:border-blue-900 focus:outline-none text-gray-700 bg-white"
+                className={`w-full px-4 py-3 border-2 focus:outline-none ${isDark ? 'bg-gray-700 border-gray-600 focus:border-orange-500 text-white' : 'bg-white border-gray-300 focus:border-blue-900'}`}
               >
                 <option value="all">{t('all')}</option>
                 <option value="unread">{t('unreadOnly')}</option>
@@ -219,8 +201,8 @@ const Alerts = () => {
         </div>
 
         {/* Results Count */}
-        <div className="bg-blue-50 border-l-4 border-blue-900 px-6 py-3 mb-6">
-          <p className="text-gray-700 font-semibold">{t('showing')} {filteredAlerts.length} {t('alert')}</p>
+        <div className={`border-l-4 px-6 py-3 mb-6 ${isDark ? 'border-orange-500 bg-gray-800' : 'border-blue-900 bg-blue-50'}`}>
+          <p className={`font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>{t('showing')} {filteredAlerts.length} {t('alert')}</p>
         </div>
 
         {/* Alerts List */}
@@ -231,45 +213,45 @@ const Alerts = () => {
               return (
                 <div 
                   key={alert.id} 
-                  className={`border-2 ${colors.border} ${colors.bg} p-6 hover:shadow-lg transition-shadow ${!alert.read ? 'border-l-8' : ''}`}
+                  className={`border-2 ${colors.border} ${colors.bg} p-6 hover:shadow-lg transition-shadow ${isDark ? 'bg-gray-800' : ''} ${!alert.read ? 'border-l-8' : ''}`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0">
-                      {colors.icon}
+                    <div className="flex-shrink-0 pt-1">
+                      {getAlertIcon(alert.type)}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-800">{lang === 'en' ? alert.title : alert.titleMr}</h4>
+                          <h4 className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{lang === 'en' ? alert.title : alert.titleMr}</h4>
                           <span className={`inline-block mt-2 px-3 py-1 text-xs font-bold border-2 ${colors.badge}`}>
                             {alert.type === 'critical' ? t('critical') : alert.type === 'warning' ? t('warning') : t('info')}
                           </span>
                         </div>
                         {!alert.read && (
-                          <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">{t('new')}</span>
+                          <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap ml-4">{t('new')}</span>
                         )}
                       </div>
-                      <p className="text-gray-700 mt-2 mb-3">{lang === 'en' ? alert.message : alert.messageMr}</p>
-                      <div className="flex items-center justify-between text-sm text-gray-600">
-                        <div className="flex items-center gap-4 flex-wrap">
-                          <span className="font-semibold">{t('worker')} <span className="text-gray-800">{alert.worker}</span></span>
+                      <p className={`mt-2 mb-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{lang === 'en' ? alert.message : alert.messageMr}</p>
+                      <div className={`flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        <div className="flex flex-col gap-2">
+                          <span className={`font-semibold ${isDark ? 'text-gray-300' : ''}`}>{t('worker')} <span className={isDark ? 'text-gray-200' : 'text-gray-800'}>{alert.worker}</span></span>
                           <div className="flex items-center gap-1">
                             <Clock size={16} />
                             <span>{lang === 'en' ? alert.timestamp : alert.timestampMr}</span>
                           </div>
                         </div>
-                        <div className="flex gap-2 mt-2 md:mt-0">
+                        <div className="flex gap-2">
                           {!alert.read && (
                             <button
                               onClick={() => handleMarkAsRead(alert.id)}
-                              className="bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 font-semibold transition-colors text-sm whitespace-nowrap"
+                              className={`${isDark ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-900 hover:bg-blue-800'} text-white px-4 py-2 font-semibold transition-colors text-sm whitespace-nowrap`}
                             >
                               {t('markAsRead')}
                             </button>
                           )}
                           <button
                             onClick={() => handleDismiss(alert.id)}
-                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 font-semibold transition-colors text-sm flex items-center gap-2 whitespace-nowrap"
+                            className={`${isDark ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-300 hover:bg-gray-400 text-gray-800'} px-4 py-2 font-semibold transition-colors text-sm flex items-center gap-2 whitespace-nowrap`}
                           >
                             <X size={16} /> {t('dismiss')}
                           </button>
@@ -282,17 +264,12 @@ const Alerts = () => {
             })}
           </div>
         ) : (
-          <div className="border-2 border-gray-300 bg-white p-12 text-center">
-            <CheckCircle size={48} className="text-green-600 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg font-semibold">{t('noAlerts')}</p>
-            <p className="text-gray-500 mt-2">{t('allSystemsNormal')}</p>
+          <div className={`border-2 ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'} p-12 text-center shadow-md`}>
+            <CheckCircle size={48} className={isDark ? 'text-green-400' : 'text-green-600'} style={{ margin: '0 auto 1rem' }} />
+            <p className={`text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('noAlerts')}</p>
+            <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>{t('allSystemsNormal')}</p>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="border-t-4 border-orange-400 bg-gray-50 px-6 py-4 text-center text-xs text-gray-600 mt-12">
-          <p>{t('copyright')}</p>
-        </div>
       </div>
     </div>
   );

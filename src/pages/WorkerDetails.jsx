@@ -8,23 +8,6 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
   const [photoPreview, setPhotoPreview] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  // Mock worker with extended profile
-  const worker = selectedWorker || {
-    id: 1,
-    nameEn: 'Priya Sharma',
-    nameMr: 'प्रिया शर्मा',
-    email: 'priya@example.com',
-    phone: '9876543210',
-    villageEn: 'Nandpur',
-    villageMr: 'नांदपूर',
-    tasksCompleted: 24,
-    tasksRemaining: 3,
-    status: 'active',
-    performance: 92,
-    joinDate: '2022-01-15',
-    avatar: 'प्र'
-  };
-
   const translations = {
     en: {
       backToList: 'Back to Workers List',
@@ -65,6 +48,8 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
       cancel: 'Cancel',
       save: 'Save',
       noWorkerSelected: 'No worker selected',
+      fileSizeTooLarge: 'File size too large. Maximum 5MB allowed.',
+      photoSavedSuccessfully: 'Photo saved successfully!',
       recentTasksList: [
         { task: 'Health Campaign - Vaccination Drive', date: '3 days ago' },
         { task: 'Community Awareness Program', date: '5 days ago' },
@@ -92,17 +77,17 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
       assignedVillage: 'नियुक्त गाव',
       joinDate: 'सामील होण्याची तारीख',
       taskStatistics: 'कार्य आंकडे आणि कार्यक्षमता मेट्रिक्स',
-      tasksCompleted: 'पूर्ण झालेली कार्य',
+      tasksCompleted: 'पूर्ण झालेली कार्ये',
       successfulCompletions: 'यशस्वी पूर्णता',
-      pendingTasks: 'प्रलंबित कार्य',
+      pendingTasks: 'प्रलंबित कार्ये',
       awaitingCompletion: 'पूर्णतेची प्रतीक्षा',
-      totalTasks: 'एकूण कार्य',
+      totalTasks: 'एकूण कार्ये',
       overallWorkload: 'एकूण कामाचा भार',
       completionRate: 'पूर्णता दर',
       successRatio: 'यश अनुपात',
       monthlyChart: 'मासिक कार्य पूर्णता तक्ता (2024)',
       yearToDate: 'वर्षभरातील कार्यक्षमता ट्रॅकिंग',
-      recentTasks: 'अलीकडील पूर्ण झालेली कार्य',
+      recentTasks: 'अलीकडील पूर्ण झालेली कार्ये',
       activityLog: 'क्रियाकलाप लॉग',
       editDetails: 'कार्यकर्ता तपशील संपादित करा',
       downloadReport: 'अहवाल डाउनलोड करा',
@@ -117,17 +102,19 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
       cancel: 'रद्द करा',
       save: 'जतन करा',
       noWorkerSelected: 'कोणताही कार्यकर्ता निवडला नाही',
+      fileSizeTooLarge: 'फाइल आकार खूप मोठा आहे. कमाल 5MB परवानगी आहे.',
+      photoSavedSuccessfully: 'फोटो यशस्वीरित्या जतन झाला!',
       recentTasksList: [
-        { task: 'आरोग्य मोहिम - लस देण्याचा मोहिम', date: '3 दिवस आधी' },
-        { task: 'समाज जागरूकता कार्यक्रम', date: '5 दिवस आधी' },
-        { task: 'आरोग्य तपासणी शिबिर', date: '7 दिवस आधी' },
-        { task: 'मातृत्व आरोग्य प्रशिक्षण', date: '10 दिवस आधी' },
+        { task: 'आरोग्य मोहीम - लसीकरण मोहीम', date: '३ दिवसांपूर्वी' },
+        { task: 'समाज जागरूकता कार्यक्रम', date: '५ दिवसांपूर्वी' },
+        { task: 'आरोग्य तपासणी शिबिर', date: '७ दिवसांपूर्वी' },
+        { task: 'मातृत्व आरोग्य प्रशिक्षण', date: '१० दिवसांपूर्वी' },
       ],
       activityLogList: [
-        { activity: 'कार्य पूर्ण म्हणून चिन्हांकित केले', time: '2 तास आधी' },
-        { activity: 'कार्यकर्त्याला नवीन कार्य नियुक्त केले', time: '5 तास आधी' },
-        { activity: 'कार्यक्षमता समीक्षा आयोजित केली', time: '1 दिवस आधी' },
-        { activity: 'प्रशिक्षण सत्रास उपस्थित राहिले', time: '2 दिवस आधी' },
+        { activity: 'कार्य पूर्ण म्हणून चिन्हांकित केले', time: '२ तासांपूर्वी' },
+        { activity: 'कार्यकर्त्याला नवीन कार्य नियुक्त केले', time: '५ तासांपूर्वी' },
+        { activity: 'कार्यक्षमता समीक्षा आयोजित केली', time: '१ दिवसापूर्वी' },
+        { activity: 'प्रशिक्षण सत्रास उपस्थित राहिले', time: '२ दिवसांपूर्वी' },
       ]
     }
   };
@@ -144,7 +131,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
     if (file) {
       // Check file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert(lang === 'en' ? 'File size too large. Maximum 5MB allowed.' : 'फाइल आकार खूप मोठा आहे. कमाल 5MB परवानगी आहे.');
+        alert(t('fileSizeTooLarge'));
         return;
       }
 
@@ -163,7 +150,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
       // In a real app, you'd upload this to a server
       console.log('Photo saved:', profilePhoto);
       setShowUploadModal(false);
-      alert(lang === 'en' ? 'Photo saved successfully!' : 'फोटो यशस्वीरित्या जतन झाला!');
+      alert(t('photoSavedSuccessfully'));
     }
   };
 
@@ -172,7 +159,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
     setProfilePhoto(null);
   };
 
-  if (!worker) {
+  if (!selectedWorker) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
@@ -183,20 +170,24 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
   }
 
   const workerChartData = [
-    { month: 'Jan', completed: 4 },
-    { month: 'Feb', completed: 5 },
-    { month: 'Mar', completed: 4 },
-    { month: 'Apr', completed: 6 },
-    { month: 'May', completed: 5 },
-    { month: 'Jun', completed: 7 },
+    { month: lang === 'mr' ? 'जाने' : 'Jan', completed: 4 },
+    { month: lang === 'mr' ? 'फेब्रु' : 'Feb', completed: 5 },
+    { month: lang === 'mr' ? 'मार्च' : 'Mar', completed: 4 },
+    { month: lang === 'mr' ? 'एप्रिल' : 'Apr', completed: 6 },
+    { month: lang === 'mr' ? 'मे' : 'May', completed: 5 },
+    { month: lang === 'mr' ? 'जून' : 'Jun', completed: 7 },
   ];
 
-  const completionRate = Math.round((worker.tasksCompleted / (worker.tasksCompleted + worker.tasksRemaining)) * 100);
+  const completionRate = Math.round((selectedWorker.tasksCompleted / (selectedWorker.tasksCompleted + selectedWorker.tasksRemaining)) * 100);
 
   const handleBackClick = () => {
     setCurrentPage('workers');
     setSelectedWorker(null);
   };
+
+  // Get worker name and village based on language
+  const workerName = lang === 'mr' ? selectedWorker.nameMr : selectedWorker.nameEn;
+  const workerVillage = lang === 'mr' ? selectedWorker.villageMr : selectedWorker.villageEn;
 
   return (
     <div className="min-h-screen bg-white">
@@ -223,7 +214,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
               <span className="text-white font-bold text-lg">📋</span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">{worker.name}</h1>
+              <h1 className="text-3xl font-bold text-white">{workerName}</h1>
               <p className="text-blue-100 text-sm mt-1">{t('workerProfile')}</p>
             </div>
           </div>
@@ -253,7 +244,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
                   <button
                     onClick={() => setShowUploadModal(true)}
                     className="absolute bottom-0 right-0 bg-orange-400 hover:bg-orange-500 text-white p-2 rounded-full transition-colors shadow-lg"
-                    title={lang === 'en' ? 'Upload photo' : 'फोटो अपलोड करा'}
+                    title={t('uploadPhoto')}
                   >
                     <Upload size={20} />
                   </button>
@@ -264,22 +255,22 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
               {/* Worker Details */}
               <div>
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('workerName')}</p>
-                <p className="text-2xl font-bold text-blue-900">{worker.name}</p>
+                <p className="text-2xl font-bold text-blue-900">{workerName}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('currentStatus')}</p>
                 <div className={`px-4 py-2 font-bold inline-block border-2 ${
-                  worker.status === 'active'
+                  selectedWorker.status === 'active'
                     ? 'bg-green-100 border-green-600 text-green-800'
                     : 'bg-gray-100 border-gray-600 text-gray-800'
                 }`}>
-                  {worker.status === 'active' ? t('active') : t('inactive')}
+                  {selectedWorker.status === 'active' ? t('active') : t('inactive')}
                 </div>
               </div>
               <div>
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('performanceRating')}</p>
                 <div className="bg-white border-2 border-blue-900 px-4 py-2 inline-block">
-                  <p className="text-3xl font-bold text-blue-900">{worker.performance}%</p>
+                  <p className="text-3xl font-bold text-blue-900">{selectedWorker.performance}%</p>
                 </div>
               </div>
             </div>
@@ -359,21 +350,21 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
                 <Mail size={24} className="text-orange-500 flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm text-gray-600 font-semibold mb-1">{t('emailAddress')}</p>
-                  <p className="text-gray-800 font-semibold">{worker.email}</p>
+                  <p className="text-gray-800 font-semibold">{selectedWorker.email}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <Phone size={24} className="text-blue-900 flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm text-gray-600 font-semibold mb-1">{t('phoneNumber')}</p>
-                  <p className="text-gray-800 font-semibold">{worker.phone}</p>
+                  <p className="text-gray-800 font-semibold">{selectedWorker.phone}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <MapPin size={24} className="text-green-600 flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm text-gray-600 font-semibold mb-1">{t('assignedVillage')}</p>
-                  <p className="text-gray-800 font-semibold">{worker.village}</p>
+                  <p className="text-gray-800 font-semibold">{workerVillage}</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -381,7 +372,7 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
                 <div>
                   <p className="text-sm text-gray-600 font-semibold mb-1">{t('joinDate')}</p>
                   <p className="text-gray-800 font-semibold">
-                    {new Date(worker.joinDate).toLocaleDateString('en-IN')}
+                    {new Date(selectedWorker.joinDate).toLocaleDateString(lang === 'mr' ? 'mr-IN' : 'en-IN')}
                   </p>
                 </div>
               </div>
@@ -398,18 +389,18 @@ const WorkerDetails = ({ selectedWorker, setCurrentPage, setSelectedWorker }) =>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="border-l-4 border-green-600 bg-green-50 px-4 py-4">
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('tasksCompleted')}</p>
-                <p className="text-4xl font-bold text-green-700">{worker.tasksCompleted}</p>
+                <p className="text-4xl font-bold text-green-700">{selectedWorker.tasksCompleted}</p>
                 <p className="text-xs text-gray-600 mt-2">{t('successfulCompletions')}</p>
               </div>
               <div className="border-l-4 border-orange-500 bg-orange-50 px-4 py-4">
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('pendingTasks')}</p>
-                <p className="text-4xl font-bold text-orange-700">{worker.tasksRemaining}</p>
+                <p className="text-4xl font-bold text-orange-700">{selectedWorker.tasksRemaining}</p>
                 <p className="text-xs text-gray-600 mt-2">{t('awaitingCompletion')}</p>
               </div>
               <div className="border-l-4 border-blue-900 bg-blue-50 px-4 py-4">
                 <p className="text-sm text-gray-600 font-semibold mb-2">{t('totalTasks')}</p>
                 <p className="text-4xl font-bold text-blue-900">
-                  {worker.tasksCompleted + worker.tasksRemaining}
+                  {selectedWorker.tasksCompleted + selectedWorker.tasksRemaining}
                 </p>
                 <p className="text-xs text-gray-600 mt-2">{t('overallWorkload')}</p>
               </div>

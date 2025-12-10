@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { User, LogOut, Settings, LayoutDashboard, Users, CheckSquare, Bell, Sliders, Globe, Moon, Sun } from 'lucide-react';
-import { useAppContext } from '../App';
 
 const MainLayout = ({ 
   currentPage, 
@@ -11,9 +10,12 @@ const MainLayout = ({
   setUserName,
   onProfileClick,
   onLogout,
+  theme,
+  setTheme,
+  lang,
+  setLang,
   children 
 }) => {
-  const { lang, setLang, isDark, setIsDark } = useAppContext();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const translations = {
@@ -62,6 +64,7 @@ const MainLayout = ({
   ];
 
   // Theme Colors
+  const isDark = theme === 'dark';
   const headerBg = isDark ? 'bg-gray-900 border-gray-800' : 'bg-gradient-to-r from-blue-800 to-blue-700';
   const sidebarBg = isDark ? 'bg-gray-800' : 'bg-gradient-to-b from-blue-950 via-blue-900 to-blue-850';
   const cardBg = isDark ? 'bg-gray-800' : 'bg-white';
@@ -117,14 +120,14 @@ const MainLayout = ({
             <div className={`flex gap-1 items-center ${isDark ? 'bg-gray-700' : 'bg-blue-700'} rounded-lg p-2`}>
               {isDark ? <Moon size={18} className="text-blue-200" /> : <Sun size={18} className="text-yellow-300" />}
               <button 
-                onClick={() => setIsDark(false)} 
-                className={`px-3 py-1 rounded font-bold transition-all ${!isDark ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-600'}`}
+                onClick={() => setTheme('light')} 
+                className={`px-3 py-1 rounded font-bold transition-all ${theme === 'light' ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-600'}`}
               >
                 ☀️
               </button>
               <button 
-                onClick={() => setIsDark(true)} 
-                className={`px-3 py-1 rounded font-bold transition-all ${isDark ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-600'}`}
+                onClick={() => setTheme('dark')} 
+                className={`px-3 py-1 rounded font-bold transition-all ${theme === 'dark' ? 'bg-white text-blue-900' : 'bg-transparent text-white hover:bg-blue-600'}`}
               >
                 🌙
               </button>
@@ -160,7 +163,7 @@ const MainLayout = ({
                         onProfileClick();
                         setShowProfileMenu(false);
                       }}
-                      className={`w-full text-left px-4 py-3 hover:${isDark ? 'bg-gray-700' : 'bg-blue-50'} flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-700'} font-semibold text-sm border-b ${borderColor} transition-colors`}
+                      className={`w-full text-left px-4 py-3 ${isDark ? 'hover:bg-gray-700' : 'hover:bg-blue-50'} flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-700'} font-semibold text-sm border-b ${borderColor} transition-colors`}
                     >
                       <Settings size={18} className="text-blue-900" />
                       {t('settings')}
@@ -170,7 +173,7 @@ const MainLayout = ({
                         onLogout();
                         setShowProfileMenu(false);
                       }}
-                      className={`w-full text-left px-4 py-3 hover:${isDark ? 'bg-red-900 bg-opacity-30' : 'bg-red-50'} flex items-center gap-3 text-red-600 font-semibold text-sm transition-colors`}
+                      className={`w-full text-left px-4 py-3 ${isDark ? 'hover:bg-red-900 hover:bg-opacity-30' : 'hover:bg-red-50'} flex items-center gap-3 text-red-600 font-semibold text-sm transition-colors`}
                     >
                       <LogOut size={18} />
                       {t('logout')}
@@ -231,20 +234,20 @@ const MainLayout = ({
 
           {/* Footer */}
           <div className={`px-4 py-3 text-center border-t ${borderColor} ${isDark ? 'bg-gray-950' : 'bg-blue-950'}`}>
-            <p className="text-blue-300 text-xs leading-relaxed">© 2024 Ministry of Health &</p>
+            <p className="text-blue-300 text-xs leading-relaxed">© 2025 Ministry of Health &</p>
             <p className="text-blue-300 text-xs">Family Welfare, Govt. of India</p>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className={`flex-1 overflow-auto`}>
+        <div className={`flex-1 overflow-auto ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
           {children}
         </div>
       </div>
 
       {/* Bottom Footer */}
       <div className={`${isDark ? 'bg-gray-900 border-gray-800' : 'bg-blue-900 border-blue-800'} text-blue-200 text-xs py-3 px-8 border-t text-center`}>
-        <p>© 2024 All Rights Reserved. Ministry of Health and Family Welfare, Government of India</p>
+        <p>© 2025 All Rights Reserved. Ministry of Health and Family Welfare, Government of India</p>
       </div>
     </div>
   );

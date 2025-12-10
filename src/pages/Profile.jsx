@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, X, Upload } from 'lucide-react';
 
-const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackClick }) => {
+const Profile = ({ theme, lang, userPhoto, setUserPhoto, userName, setUserName, onBackClick }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(userName);
   const [editedEmail, setEditedEmail] = useState('admin@health.gov.in');
@@ -82,6 +82,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
 
   const t = (key) => translations[lang][key] || key;
 
+  const isDark = theme === 'dark';
+  const bgColor = isDark ? 'bg-gray-900' : 'bg-gray-50';
+  const textColor = isDark ? 'text-gray-100' : 'text-gray-900';
+  const cardBg = isDark ? 'bg-gray-800' : 'bg-white';
+  const borderColor = isDark ? 'border-gray-700' : 'border-gray-300';
+  const secondaryText = isDark ? 'text-gray-400' : 'text-gray-600';
+  const labelText = isDark ? 'text-gray-300' : 'text-gray-600';
+  const inputBg = isDark ? 'bg-gray-700 text-gray-100 border-gray-600' : 'bg-white text-gray-900 border-gray-300';
+  const hoverBg = isDark ? 'hover:bg-gray-700' : 'hover:bg-blue-50';
+
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -120,14 +130,14 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
   ];
 
   return (
-    <div className="w-full bg-gray-50 p-6">
+    <div className={`w-full ${bgColor} ${textColor} p-6`}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-blue-900">{t('profile')}</h1>
+          <h1 className={`text-3xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>{t('profile')}</h1>
           <button
             onClick={onBackClick}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded transition-colors"
+            className={`${isDark ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-300 hover:bg-gray-400 text-gray-800'} font-bold py-2 px-4 rounded transition-colors`}
           >
             {t('back')}
           </button>
@@ -136,7 +146,7 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Photo & Basic Info */}
           <div className="lg:col-span-1">
-            <div className="border-2 border-gray-300 bg-white p-6 rounded-lg">
+            <div className={`border-2 ${borderColor} ${cardBg} p-6 rounded-lg`}>
               {/* Profile Photo */}
               <div className="text-center mb-6">
                 <div className="relative inline-block">
@@ -144,10 +154,10 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                     <img 
                       src={photoPreview} 
                       alt="Profile" 
-                      className="w-40 h-40 rounded-full object-cover border-4 border-blue-900"
+                      className={`w-40 h-40 rounded-full object-cover border-4 ${isDark ? 'border-orange-400' : 'border-blue-900'}`}
                     />
                   ) : (
-                    <div className="w-40 h-40 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center border-4 border-blue-900">
+                    <div className={`w-40 h-40 rounded-full ${isDark ? 'bg-gradient-to-br from-gray-700 to-gray-600' : 'bg-gradient-to-br from-blue-400 to-blue-600'} flex items-center justify-center border-4 ${isDark ? 'border-orange-400' : 'border-blue-900'}`}>
                       <User size={80} className="text-white" />
                     </div>
                   )}
@@ -158,23 +168,23 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                     <Upload size={20} />
                   </button>
                 </div>
-                <h2 className="text-2xl font-bold text-blue-900 mt-4">{editedName}</h2>
-                <p className="text-gray-600 font-semibold">{t('supervisor')}</p>
+                <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-blue-900'} mt-4`}>{editedName}</h2>
+                <p className={`font-semibold ${secondaryText}`}>{t('supervisor')}</p>
               </div>
 
               {/* Quick Stats */}
-              <div className="space-y-4 border-t-2 border-gray-200 pt-4">
-                <div className="text-center pb-4 border-b-2 border-gray-200">
-                  <p className="text-sm text-gray-600 font-semibold mb-1">{t('performance')}</p>
-                  <p className="text-3xl font-bold text-blue-900">92%</p>
+              <div className={`space-y-4 border-t-2 ${borderColor} pt-4`}>
+                <div className={`text-center pb-4 border-b-2 ${borderColor}`}>
+                  <p className={`text-sm ${labelText} font-semibold mb-1`}>{t('performance')}</p>
+                  <p className={`text-3xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>92%</p>
                 </div>
-                <div className="text-center pb-4 border-b-2 border-gray-200">
-                  <p className="text-sm text-gray-600 font-semibold mb-1">{t('completionRate')}</p>
-                  <p className="text-3xl font-bold text-green-600">89%</p>
+                <div className={`text-center pb-4 border-b-2 ${borderColor}`}>
+                  <p className={`text-sm ${labelText} font-semibold mb-1`}>{t('completionRate')}</p>
+                  <p className={`text-3xl font-bold ${isDark ? 'text-green-400' : 'text-green-600'}`}>89%</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm text-gray-600 font-semibold mb-1">{t('tasksCompleted')}</p>
-                  <p className="text-3xl font-bold text-blue-900">45</p>
+                  <p className={`text-sm ${labelText} font-semibold mb-1`}>{t('tasksCompleted')}</p>
+                  <p className={`text-3xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>45</p>
                 </div>
               </div>
             </div>
@@ -183,16 +193,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
           {/* Personal Information */}
           <div className="lg:col-span-2 space-y-6">
             {/* Edit Profile Card */}
-            <div className="border-2 border-gray-300 bg-white p-6 rounded-lg">
+            <div className={`border-2 ${borderColor} ${cardBg} p-6 rounded-lg`}>
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-blue-900">{t('personalInformation')}</h3>
+                <h3 className={`text-2xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'}`}>{t('personalInformation')}</h3>
                 <button
                   onClick={() => setIsEditing(!isEditing)}
                   className={`flex items-center gap-2 font-bold py-2 px-4 rounded transition-colors ${
                     isEditing 
-                      ? 'bg-red-500 hover:bg-red-600 text-white' 
-                      : 'bg-blue-900 hover:bg-blue-800 text-white'
-                  }`}
+                      ? isDark ? 'bg-red-700 hover:bg-red-600' : 'bg-red-500 hover:bg-red-600'
+                      : isDark ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-900 hover:bg-blue-800'
+                  } text-white`}
                 >
                   {isEditing ? (
                     <>
@@ -211,7 +221,7 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
               <div className="space-y-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-sm text-gray-600 font-semibold mb-2">
+                  <label className={`block text-sm ${labelText} font-semibold mb-2`}>
                     <User size={16} className="inline mr-2" />
                     {t('fullName')}
                   </label>
@@ -220,16 +230,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                       type="text"
                       value={editedName}
                       onChange={(e) => setEditedName(e.target.value)}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-blue-900 outline-none"
+                      className={`w-full px-4 py-2 border-2 rounded focus:border-orange-400 outline-none ${inputBg}`}
                     />
                   ) : (
-                    <p className="text-gray-900 font-semibold text-lg">{editedName}</p>
+                    <p className={`${textColor} font-semibold text-lg`}>{editedName}</p>
                   )}
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-sm text-gray-600 font-semibold mb-2">
+                  <label className={`block text-sm ${labelText} font-semibold mb-2`}>
                     <Mail size={16} className="inline mr-2" />
                     {t('email')}
                   </label>
@@ -238,16 +248,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                       type="email"
                       value={editedEmail}
                       onChange={(e) => setEditedEmail(e.target.value)}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-blue-900 outline-none"
+                      className={`w-full px-4 py-2 border-2 rounded focus:border-orange-400 outline-none ${inputBg}`}
                     />
                   ) : (
-                    <p className="text-gray-900 font-semibold">{editedEmail}</p>
+                    <p className={`${textColor} font-semibold`}>{editedEmail}</p>
                   )}
                 </div>
 
                 {/* Phone */}
                 <div>
-                  <label className="block text-sm text-gray-600 font-semibold mb-2">
+                  <label className={`block text-sm ${labelText} font-semibold mb-2`}>
                     <Phone size={16} className="inline mr-2" />
                     {t('phone')}
                   </label>
@@ -256,16 +266,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                       type="tel"
                       value={editedPhone}
                       onChange={(e) => setEditedPhone(e.target.value)}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-blue-900 outline-none"
+                      className={`w-full px-4 py-2 border-2 rounded focus:border-orange-400 outline-none ${inputBg}`}
                     />
                   ) : (
-                    <p className="text-gray-900 font-semibold">{editedPhone}</p>
+                    <p className={`${textColor} font-semibold`}>{editedPhone}</p>
                   )}
                 </div>
 
                 {/* Area */}
                 <div>
-                  <label className="block text-sm text-gray-600 font-semibold mb-2">
+                  <label className={`block text-sm ${labelText} font-semibold mb-2`}>
                     <MapPin size={16} className="inline mr-2" />
                     {t('area')}
                   </label>
@@ -274,16 +284,16 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                       type="text"
                       value={editedArea}
                       onChange={(e) => setEditedArea(e.target.value)}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-blue-900 outline-none"
+                      className={`w-full px-4 py-2 border-2 rounded focus:border-orange-400 outline-none ${inputBg}`}
                     />
                   ) : (
-                    <p className="text-gray-900 font-semibold">{editedArea}</p>
+                    <p className={`${textColor} font-semibold`}>{editedArea}</p>
                   )}
                 </div>
 
                 {/* Join Date */}
                 <div>
-                  <label className="block text-sm text-gray-600 font-semibold mb-2">
+                  <label className={`block text-sm ${labelText} font-semibold mb-2`}>
                     <Calendar size={16} className="inline mr-2" />
                     {t('joinDate')}
                   </label>
@@ -292,10 +302,10 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                       type="date"
                       value={editedJoinDate}
                       onChange={(e) => setEditedJoinDate(e.target.value)}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-blue-900 outline-none"
+                      className={`w-full px-4 py-2 border-2 rounded focus:border-orange-400 outline-none ${inputBg}`}
                     />
                   ) : (
-                    <p className="text-gray-900 font-semibold">{new Date(editedJoinDate).toLocaleDateString('en-IN')}</p>
+                    <p className={`${textColor} font-semibold`}>{new Date(editedJoinDate).toLocaleDateString('en-IN')}</p>
                   )}
                 </div>
               </div>
@@ -304,7 +314,7 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
               {isEditing && (
                 <button
                   onClick={handleSaveProfile}
-                  className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded transition-colors flex items-center justify-center gap-2"
+                  className={`w-full mt-6 ${isDark ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white font-bold py-3 px-6 rounded transition-colors flex items-center justify-center gap-2`}
                 >
                   <Save size={20} />
                   {t('saveChanges')}
@@ -313,32 +323,32 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
             </div>
 
             {/* Work Information */}
-            <div className="border-2 border-gray-300 bg-white p-6 rounded-lg">
-              <h3 className="text-2xl font-bold text-blue-900 mb-6">{t('workInformation')}</h3>
+            <div className={`border-2 ${borderColor} ${cardBg} p-6 rounded-lg`}>
+              <h3 className={`text-2xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'} mb-6`}>{t('workInformation')}</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border-l-4 border-green-600 bg-green-50 px-4 py-4">
-                  <p className="text-sm text-gray-600 font-semibold mb-2">{t('tasksCompleted')}</p>
-                  <p className="text-3xl font-bold text-green-700">45</p>
+                <div className={`border-l-4 ${isDark ? 'border-green-500 bg-green-900 bg-opacity-30' : 'border-green-600 bg-green-50'} px-4 py-4`}>
+                  <p className={`text-sm ${labelText} font-semibold mb-2`}>{t('tasksCompleted')}</p>
+                  <p className={`text-3xl font-bold ${isDark ? 'text-green-400' : 'text-green-700'}`}>45</p>
                 </div>
-                <div className="border-l-4 border-orange-500 bg-orange-50 px-4 py-4">
-                  <p className="text-sm text-gray-600 font-semibold mb-2">{t('pendingTasks')}</p>
-                  <p className="text-3xl font-bold text-orange-700">5</p>
+                <div className={`border-l-4 ${isDark ? 'border-orange-500 bg-orange-900 bg-opacity-30' : 'border-orange-500 bg-orange-50'} px-4 py-4`}>
+                  <p className={`text-sm ${labelText} font-semibold mb-2`}>{t('pendingTasks')}</p>
+                  <p className={`text-3xl font-bold ${isDark ? 'text-orange-400' : 'text-orange-700'}`}>5</p>
                 </div>
               </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="border-2 border-gray-300 bg-white p-6 rounded-lg">
-              <h3 className="text-2xl font-bold text-blue-900 mb-6">{t('recentActivity')}</h3>
+            <div className={`border-2 ${borderColor} ${cardBg} p-6 rounded-lg`}>
+              <h3 className={`text-2xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'} mb-6`}>{t('recentActivity')}</h3>
               
               <div className="space-y-3">
                 {recentActivities.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-4 pb-4 border-b-2 border-gray-200 last:border-b-0">
-                    <div className="w-2 h-2 bg-blue-900 rounded-full mt-2 flex-shrink-0"></div>
+                  <div key={idx} className={`flex items-start gap-4 pb-4 border-b-2 ${borderColor} last:border-b-0`}>
+                    <div className={`w-2 h-2 ${isDark ? 'bg-orange-400' : 'bg-blue-900'} rounded-full mt-2 flex-shrink-0`}></div>
                     <div className="flex-1">
-                      <p className="text-gray-800 font-semibold">{item.activity}</p>
-                      <p className="text-xs text-gray-500">{item.time}</p>
+                      <p className={`${textColor} font-semibold`}>{item.activity}</p>
+                      <p className={`text-xs ${secondaryText}`}>{item.time}</p>
                     </div>
                   </div>
                 ))}
@@ -351,26 +361,26 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
       {/* Photo Upload Modal */}
       {showPhotoModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg border-4 border-blue-900 max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">{t('uploadPhoto')}</h2>
+          <div className={`${cardBg} rounded-lg border-4 border-orange-400 max-w-md w-full p-6`}>
+            <h2 className={`text-2xl font-bold ${isDark ? 'text-orange-400' : 'text-blue-900'} mb-4`}>{t('uploadPhoto')}</h2>
             
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-4">{t('uploadInstructions')}</p>
+              <p className={`text-sm ${labelText} mb-4`}>{t('uploadInstructions')}</p>
               
               {photoPreview ? (
                 <div className="mb-4">
                   <img 
                     src={photoPreview} 
                     alt="Preview" 
-                    className="w-full h-40 object-cover rounded border-2 border-gray-300"
+                    className={`w-full h-40 object-cover rounded border-2 ${borderColor}`}
                   />
-                  <p className="text-sm text-green-600 font-semibold mt-2">✓ {t('photoUploadedSuccessfully')}</p>
+                  <p className={`text-sm ${isDark ? 'text-green-400' : 'text-green-600'} font-semibold mt-2`}>✓ {t('photoUploadedSuccessfully')}</p>
                 </div>
               ) : (
                 <label className="block w-full">
-                  <div className="border-2 border-dashed border-blue-900 rounded-lg p-6 text-center cursor-pointer hover:bg-blue-50 transition-colors">
-                    <Upload size={32} className="text-blue-900 mx-auto mb-2" />
-                    <p className="text-blue-900 font-semibold">{t('selectFile')}</p>
+                  <div className={`border-2 border-dashed ${isDark ? 'border-orange-400 hover:bg-gray-700' : 'border-blue-900 hover:bg-blue-50'} rounded-lg p-6 text-center cursor-pointer transition-colors`}>
+                    <Upload size={32} className={`${isDark ? 'text-orange-400' : 'text-blue-900'} mx-auto mb-2`} />
+                    <p className={`${isDark ? 'text-orange-400' : 'text-blue-900'} font-semibold`}>{t('selectFile')}</p>
                     <input 
                       type="file" 
                       accept="image/jpeg,image/png"
@@ -388,14 +398,14 @@ const Profile = ({ lang, userPhoto, setUserPhoto, userName, setUserName, onBackC
                   setShowPhotoModal(false);
                   setPhotoPreview(userPhoto);
                 }}
-                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 transition-colors border-2 border-gray-300 rounded"
+                className={`flex-1 ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-400'} ${isDark ? 'text-white' : 'text-gray-800'} font-bold py-2 px-4 transition-colors border-2 ${borderColor} rounded`}
               >
                 {t('cancel')}
               </button>
               {photoPreview && (
                 <button
                   onClick={handleSavePhoto}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 transition-colors border-2 border-green-600 rounded"
+                  className={`flex-1 ${isDark ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white font-bold py-2 px-4 transition-colors border-2 border-green-600 rounded`}
                 >
                   {t('save')}
                 </button>
