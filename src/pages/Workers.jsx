@@ -4,13 +4,46 @@ import { useAppContext } from '../App';
 
 // Mock Data
 const mockWorkers = [
-  { id: 1, nameEn: 'Priya Sharma', nameMr: 'प्रिया शर्मा', email: 'priya@example.com', phone: '9876543210', villageEn: 'Nandpur', villageMr: 'नांदपूर', tasksCompleted: 24, tasksRemaining: 3, status: 'active', performance: 92, photo: null },
-  { id: 2, nameEn: 'Anjali Verma', nameMr: 'अंजली वर्मा', email: 'anjali@example.com', phone: '9876543211', villageEn: 'Mehdpur', villageMr: 'मेहदपूर', tasksCompleted: 21, tasksRemaining: 5, status: 'active', performance: 88, photo: null },
-  { id: 3, nameEn: 'Roshni Patel', nameMr: 'रोशनी पटेल', email: 'roshni@example.com', phone: '9876543212', villageEn: 'Solnpur', villageMr: 'सोलनपूर', tasksCompleted: 18, tasksRemaining: 8, status: 'inactive', performance: 75, photo: null },
-  { id: 4, nameEn: 'Divya Singh', nameMr: 'दिव्या सिंह', email: 'divya@example.com', phone: '9876543213', villageEn: 'Hirapur', villageMr: 'हीरापूर', tasksCompleted: 28, tasksRemaining: 1, status: 'active', performance: 96, photo: null },
-  { id: 5, nameEn: 'Kavya Desai', nameMr: 'कव्या देसाई', email: 'kavya@example.com', phone: '9876543214', villageEn: 'Bhimpur', villageMr: 'भीमपुरा', tasksCompleted: 19, tasksRemaining: 6, status: 'active', performance: 85, photo: null },
-];
+  
+{ id: 1, nameEn: 'Sunita Bhasar', nameMr: 'सुनीता भासर', email: 'sunita@gmail.com', phone: '9087654321', villageEn: 'Shigaon', villageMr: 'शिगांव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 86, photo: null },
+{ id: 2, nameEn: 'Bismilla Sande', nameMr: 'बिस्मिल्ला संदे', email: 'bismilla@gmail.com', phone: '8909876543', villageEn: 'Shigaon', villageMr: ' शिगांव ', tasksCompleted: 48, tasksRemaining: 52, status: 'active', performance: 85, photo: null },
+{ id: 3, nameEn: 'Swati Koli', nameMr: 'स्वाती कोळी', email: 'swati@gmail.com', phone: '7890786543', villageEn: 'Shigaon', villageMr: ' शिगांव ', tasksCompleted: 75 , tasksRemaining: 25, status: 'active', performance: 80, photo: null },
+{ id: 4, nameEn: 'Sunita Kumbhar', nameMr: 'सुनीता कुंभार', email: 'sunita@gmail.com', phone: '90867584321', villageEn: 'Shigaon', villageMr: ' शिगांव ', tasksCompleted: 60, tasksRemaining: 40, status: 'active', performance: 80, photo: null },
+{ id: 5, nameEn: 'Priyanka Patil', nameMr: 'प्रियांका पाटील', email: 'priya@gmail.com', phone: '8907768590', villageEn: 'Shigaon', villageMr: ' शिगांव ', tasksCompleted: 50, tasksRemaining: 50, status: 'active', performance: 75, photo: null },
+{ id: 6, nameEn: 'Swati Chenge', nameMr: 'स्वाती चेनगे', email: 'swatii@gmail.com', phone: '907768590', villageEn: 'Shigaon', villageMr: ' शिगांव ', tasksCompleted: 65, tasksRemaining: 35, status: 'active', performance: 70, photo: null },
+{ id: 7, nameEn: 'Priyanka Chavan', nameMr: 'प्रियांका चव्हाण', email: 'priyanka@example.com', phone: '9890989098', villageEn: 'Vita', villageMr: 'शिगांव ', tasksCompleted: 70, tasksRemaining: 30, status: 'active', performance: 85, photo: null },
 
+{ id: 8, nameEn: 'Manisha Patil', nameMr: 'मनीषा पाटील', email: 'manisha@gmail.com', phone: '9087654678', villageEn: 'Bagani', villageMr: 'बागणी', tasksCompleted: 40, tasksRemaining: 60, status: 'active', performance: 50, photo: null },
+{ id: 9, nameEn: 'Rajashree Jadhav', nameMr: 'राजश्री जाधव', email: 'rajshree@gmail.com', phone: '7087654678', villageEn: 'Bagani', villageMr: 'बागणी ', tasksCompleted: 30, tasksRemaining: 70, status: 'active', performance: 40, photo: null },
+{ id: 10, nameEn: 'Nandini Kamble', nameMr: 'नंदिनी कांबळे', email: 'nandu@gmail.com', phone: '8087654678', villageEn: 'Bagani', villageMr: 'बागणी ', tasksCompleted: 40, tasksRemaining: 60, status: 'active', performance: 40, photo: null },
+{ id: 11, nameEn: 'Rani Chaudhary', nameMr: 'राणी चौधरी', email: 'rani@gmail.com', phone: '9187654678', villageEn: 'Bagani', villageMr: 'बागणी ', tasksCompleted: 40, tasksRemaining: 60, status: 'active', performance: 40, photo: null },
+
+{ id: 12, nameEn: 'Rupali Chavan', nameMr: 'रूपाली चव्हाण', email: 'rupali@gmail.com', phone: '8908765436', villageEn: 'Kakachiwadi', villageMr: 'काकाचिवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 90, photo: null },
+{ id: 13, nameEn: 'Anita Kharpe', nameMr: 'अनिता खरपे', email: 'anita@gmail.com', phone: '7890765432', villageEn: 'Kakachiwadi', villageMr: 'काकाचिवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 90, photo: null },
+{ id: 14, nameEn: 'Yasmin Shaikh', nameMr: 'यास्मिन शेख', email: 'yasmin@gmail.com', phone: '9087908789', villageEn: 'Kakachiwadi', villageMr: 'काकाचिवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 0, photo: null },
+
+{ id: 15, nameEn: 'Amina Patel', nameMr: 'अमीना पटेल', email: 'manisha@gmail.com', phone: '8901245678', villageEn: 'Bhadkambe', villageMr: 'भडकंबे', tasksCompleted: 70, tasksRemaining: 30, status: 'active', performance: 70, photo: null },
+{ id: 16, nameEn: 'Ashwini Kamble', nameMr: 'अश्विनी कांबळे', email: 'amina@gmail.com', phone: '8901245678', villageEn: 'Bhadkambe', villageMr: 'भडकंबे', tasksCompleted: 70, tasksRemaining: 30, status: 'active', performance: 70, photo: null },
+{ id: 17, nameEn: 'Ranjana Pawar', nameMr: 'रंजना पवार', email: 'ranjana@gmail.com', phone: '8901245678', villageEn: 'Bhadkambe', villageMr: 'भडकंबे', tasksCompleted: 70, tasksRemaining: 30, status: 'active', performance: 70, photo: null },
+
+{ id: 18, nameEn: 'Jasmin Mujawar', nameMr: 'जस्मिन मुजावर', email: 'jasmin@gmail.com', phone: '8901234567', villageEn: 'Phalkewadi', villageMr: 'फाळकेवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 90, photo: null },
+{ id: 19, nameEn: 'Yogini Jadhav', nameMr: 'योगिनी जाधव', email: 'yogini@gmail.com', phone: '8901234567', villageEn: 'Phalkewadi', villageMr: 'फाळकेवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 90, photo: null },
+{ id: 20, nameEn: 'Suvarna Khade', nameMr: 'सुवर्णा खाडे', email: 'suvrna@gmail.com', phone: '8901234567', villageEn: 'Phalkewadi', villageMr: 'फाळकेवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 90, photo: null },
+
+{ id: 21, nameEn: 'Reshma Gaikwad', nameMr: 'रेश्मा गायकवाड', email: 'reshma@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+{ id: 22, nameEn: 'Anita Patil', nameMr: 'अनिता पाटील', email: 'anita@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+{ id: 23, nameEn: 'Renuka Kale', nameMr: 'रेणुका काळे', email: 'renuka@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+{ id: 24, nameEn: 'Alisha Inamdar', nameMr: 'अलीशा इनामदार', email: 'alisha@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+{ id: 25, nameEn: 'Sheetal Mane', nameMr: 'शितल माने', email: 'shital@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+{ id: 26, nameEn: 'Shubhangi Jambhale', nameMr: 'शुभांगी जांभळे', email: 'subh@gmail.com', phone: '8909876547', villageEn: 'Koregaon', villageMr: 'कोरेगाव', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+
+{ id: 27, nameEn: 'Sunita Patil', nameMr: 'सुनीता पाटील', email: 'sunitaa@gmail.com', phone: '8907768594', villageEn: 'Faranewadi', villageMr: 'फारणेवाडी', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 90, photo: null },
+{ id: 28, nameEn: 'Rohini Kumbhar', nameMr: 'रोहिणी कुंभार', email: 'rohini@gmail.com', phone: '8907768594', villageEn: 'Faranewadi', villageMr: 'फारणेवाडी', tasksCompleted: 70, tasksRemaining: 30, status: 'active', performance: 80, photo: null },
+{ id: 29, nameEn: 'Jyoti Jadhav', nameMr: 'ज्योती जाधव', email: 'jyoti@gmail.com', phone: '8907768594', villageEn: 'Faranewadi', villageMr: 'फारणेवाडी', tasksCompleted: 90, tasksRemaining: 10, status: 'active', performance: 80, photo: null },
+{ id: 30, nameEn: 'Meenaj Shaikh', nameMr: 'मीनाज शेख', email: 'minaj@gmail.com', phone: '8907768594', villageEn: 'Faranewadi', villageMr: 'फारणेवाडी', tasksCompleted: 80, tasksRemaining: 20, status: 'active', performance: 80, photo: null },
+
+  
+];
 // Translations
 const translations = {
   en: {
