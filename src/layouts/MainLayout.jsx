@@ -4,16 +4,16 @@ import { User, LogOut, Settings, LayoutDashboard, Users, CheckSquare, Bell, Slid
 const MainLayout = ({ 
   currentPage, 
   setCurrentPage,
-  userName,
+  userName = 'Prerna Mane',
   userPhoto,
-  setUserPhoto,
-  setUserName,
-  onProfileClick,
-  onLogout,
-  theme,
-  setTheme,
-  lang,
-  setLang,
+  setUserPhoto = () => {},
+  setUserName = () => {},
+  onProfileClick = () => {},
+  onLogout = () => {},
+  theme = 'light',
+  setTheme = () => {},
+  lang = 'en',
+  setLang = () => {},
   children 
 }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -155,7 +155,7 @@ const MainLayout = ({
                 {showProfileMenu && (
                   <div className={`absolute right-0 mt-2 w-56 ${cardBg} border border-gray-300 shadow-xl z-50 rounded-sm`}>
                     <div className={`px-4 py-4 border-b ${borderColor} ${isDark ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-blue-900'}`}>{userName}</p>
+                      <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-blue-900'}`}>Prerna Mane</p>
                       <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-blue-700'} mt-1`}>Senior ASHA Supervisor</p>
                     </div>
                     <button

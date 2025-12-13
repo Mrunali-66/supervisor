@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, X, Upload } from 'lucide-react';
 
 
-const Profile = ({ theme, lang, userPhoto, setUserPhoto, userName, setUserName, onBackClick }) => {
+const Profile = ({ theme = 'light', lang = 'en', userPhoto, setUserPhoto, userName, setUserName, onBackClick = () => {} }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedName, setEditedName] = useState(userName);
+  const [editedName, setEditedName] = useState('Prerna Mane');
   const [editedEmail, setEditedEmail] = useState('admin@health.gov.in');
   const [editedPhone, setEditedPhone] = useState('+91 9876543210');
   const [editedArea, setEditedArea] = useState('Zone A');
   const [editedJoinDate, setEditedJoinDate] = useState('2022-01-15');
-  const [photoPreview, setPhotoPreview] = useState(userPhoto);
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
+
+  const defaultPhoto = './profile.jpeg';
+
+
+  // Load photo from storage on mount
+  useEffect(() => {
+    const loadPhoto = async () => {
+      if (typeof window.storage === 'undefined') {
+        setPhotoPreview(defaultPhoto);
+        return;
+      }
+      try {
+        const result = await window.storage.get('prerna-profile-photo');
+        if (result && result.value) {
+          setPhotoPreview(result.value);
+        } else {
+          setPhotoPreview(defaultPhoto);
+        }
+      } catch (error) {
+        console.log('No photo stored, using default');
+        setPhotoPreview(defaultPhoto);
+      }
+    };
+    loadPhoto();
+  }, []);
 
   const translations = {
     en: {
@@ -109,9 +134,21 @@ const Profile = ({ theme, lang, userPhoto, setUserPhoto, userName, setUserName, 
     }
   };
 
-  const handleSavePhoto = () => {
-    if (photoPreview) {
-      setUserPhoto(photoPreview);
+  const handleSavePhoto = async () => {
+    if (photoPreview && typeof window.storage !== 'undefined') {
+      try {
+        const result = await window.storage.set('prerna-profile-photo', photoPreview);
+        if (result) {
+          setShowPhotoModal(false);
+          alert(t('photoUploadedSuccessfully'));
+        } else {
+          alert('Error saving photo. Please try again.');
+        }
+      } catch (error) {
+        console.error('Storage error:', error);
+        alert('Error saving photo: ' + (error.message || 'Unknown error'));
+      }
+    } else if (photoPreview) {
       setShowPhotoModal(false);
       alert(t('photoUploadedSuccessfully'));
     }
@@ -368,7 +405,7 @@ const Profile = ({ theme, lang, userPhoto, setUserPhoto, userName, setUserName, 
             <div className="mb-6">
               <p className={`text-sm ${labelText} mb-4`}>{t('uploadInstructions')}</p>
               
-              {photoPreview ? (
+              {photoPreview && photoPreview !== defaultPhoto ? (
                 <div className="mb-4">
                   <img 
                     src={photoPreview} 
@@ -397,13 +434,13 @@ const Profile = ({ theme, lang, userPhoto, setUserPhoto, userName, setUserName, 
               <button
                 onClick={() => {
                   setShowPhotoModal(false);
-                  setPhotoPreview(userPhoto);
+                  setPhotoPreview(defaultPhoto);
                 }}
                 className={`flex-1 ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-400'} ${isDark ? 'text-white' : 'text-gray-800'} font-bold py-2 px-4 transition-colors border-2 ${borderColor} rounded`}
               >
                 {t('cancel')}
               </button>
-              {photoPreview && (
+              {photoPreview && photoPreview !== defaultPhoto && (
                 <button
                   onClick={handleSavePhoto}
                   className={`flex-1 ${isDark ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white font-bold py-2 px-4 transition-colors border-2 border-green-600 rounded`}

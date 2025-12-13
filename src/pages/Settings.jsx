@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Save, AlertCircle, CheckCircle, Camera } from 'lucide-react';
 
-const SettingsPage = ({ theme, setTheme, lang, setLang }) => {
+const SettingsPage = ({ theme = 'light', setTheme = () => {}, lang = 'en', setLang = () => {} }) => {
   const [activeTab, setActiveTab] = useState('profile');
-  const [userPhoto, setUserPhoto] = useState('');
+  const [userPhoto, setUserPhoto] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const [profileData, setProfileData] = useState({
-    firstName: 'Priya',
-    lastName: 'Sharma',
-    email: 'priya.sharma@health.gov.in',
+    firstName: 'Prerna',
+    lastName: 'Mane',
+    email: 'prerna.mane@health.gov.in',
     phone: '+91 9876543210',
     designation: 'Senior ASHA Supervisor',
-    region: 'Northern Region - State A',
-    officeLocation: 'District Health Office, Delhi',
+    region: 'Zone A',
+    officeLocation: 'District Health Office, Pune',
   });
 
   const [notificationSettings, setNotificationSettings] = useState({
@@ -38,6 +38,30 @@ const SettingsPage = ({ theme, setTheme, lang, setLang }) => {
     autoRefresh: true,
     refreshInterval: '5',
   });
+
+  const defaultPhoto = './profile.jpeg';
+
+  // Load photo from storage on mount
+  useEffect(() => {
+    const loadPhoto = async () => {
+      if (typeof window.storage === 'undefined') {
+        setUserPhoto(defaultPhoto);
+        return;
+      }
+      try {
+        const result = await window.storage.get('prerna-profile-photo');
+        if (result && result.value) {
+          setUserPhoto(result.value);
+        } else {
+          setUserPhoto(defaultPhoto);
+        }
+      } catch (error) {
+        console.log('No photo stored, using default');
+        setUserPhoto(defaultPhoto);
+      }
+    };
+    loadPhoto();
+  }, []);
 
   const translations = {
     en: {
@@ -207,19 +231,34 @@ const SettingsPage = ({ theme, setTheme, lang, setLang }) => {
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setUserPhoto(reader.result);
+      reader.onloadend = async () => {
+        const photoData = reader.result;
+        setUserPhoto(photoData);
+        // Save to persistent storage
+        if (typeof window.storage !== 'undefined') {
+          try {
+            await window.storage.set('prerna-profile-photo', photoData);
+            setSuccessMessage(t('savedSuccess'));
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+          } catch (error) {
+            console.error('Error saving photo:', error);
+          }
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const defaultPhoto = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop';
   const currentPhoto = userPhoto || defaultPhoto;
+
+  if (!userPhoto) {
+    return <div className={`min-h-screen ${bgColor} ${textColor} flex items-center justify-center`}>Loading...</div>;
+  }
 
   return (
     <div className={`min-h-screen ${bgColor} ${textColor}`}>
